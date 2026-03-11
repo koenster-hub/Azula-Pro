@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tinzo Pro — Hybride tinnitus zorg voor professionals</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ===== TOKENS ===== */
+:root {
+  --bg:        hsl(210, 40%, 98%);
+  --fg:        hsl(213, 50%, 15%);
+  --card:      hsl(0, 0%, 100%);
+  --primary:   hsl(213, 45%, 32%);
+  --primary-fg:hsl(0, 0%, 100%);
+  --secondary: hsl(210, 50%, 94%);
+  --muted:     hsl(213, 25%, 40%);
+  --accent:    hsl(28, 85%, 55%);
+  --accent-fg: hsl(0, 0%, 100%);
+  --olive:     hsl(80, 30%, 42%);
+  --border:    hsl(210, 25%, 89%);
+  --radius:    0.75rem;
+  --font:      'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ===== UTILITIES ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+.badge-pill {
+  display: inline-block;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .375rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  margin-bottom: 1.25rem;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: .75rem;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+.section-heading h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  color: var(--fg);
+}
+.section-heading p {
+  margin-top: .75rem;
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 36rem;
+  margin-inline: auto;
+  line-height: 1.65;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  border-radius: 9999px;
+  font-family: var(--font);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-fg);
+  padding: .75rem 2rem;
+  font-size: 1rem;
+}
+.btn-primary:hover { background: hsl(213, 45%, 26%); transform: translateY(-1px); box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 25%, transparent); }
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: .75rem 2rem;
+  font-size: 1rem;
+}
+.btn-accent:hover { background: hsl(28, 85%, 48%); transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--fg);
+  padding: .75rem 2rem;
+  font-size: 1rem;
+  border: 2px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm {
+  padding: .4rem .9rem;
+  font-size: .75rem;
+  gap: .3rem;
+}
+.btn-sm svg { width: 14px; height: 14px; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--card) 80%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+}
+.logo-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+.logo-badge {
+  background: var(--primary);
+  color: var(--primary-fg);
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: .2rem .55rem;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-cta { margin-left: .5rem; }
+
+/* Zorg dat de CTA-knop in de navbar witte tekst heeft */
+.nav-cta .btn-accent,
+.nav-cta .btn-accent:hover {
+  color: var(--accent-fg);
+}
+
+/* Mobile menu */
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--fg); }
+.mobile-menu { display: none; flex-direction: column; gap: 1rem; padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); background: var(--card); }
+.mobile-menu a { font-size: .875rem; font-weight: 500; color: var(--muted); }
+
+/* Zorg dat de demo-knop in het mobiele menu witte tekst heeft */
+.mobile-menu .btn-accent,
+.mobile-menu .btn-accent:hover {
+  color: var(--accent-fg);
+}
+
+@media (max-width: 768px) {
+  .nav-desktop { display: none; }
+  .nav-toggle { display: flex; }
+  .mobile-menu.open { display: flex; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0 6rem;
+  background: linear-gradient(180deg, hsl(162, 56%, 96%) 0%, hsl(0, 0%, 100%) 100%);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .hero { padding: 7rem 0 8rem; }
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+}
+
+@media (max-width: 768px) {
+  /* Iets minder ruimte boven de badge op mobiel */
+  .hero { padding-top: 2.5rem; }
+}
+
+.hero-text h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  color: var(--fg);
+}
+.hero-text h1 .muted { color: var(--muted); }
+.hero-text p {
+  margin-top: 1.25rem;
+  max-width: 32rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.hero-btns {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+.trust-items {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.25rem;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.trust-item svg { color: var(--primary); flex-shrink: 0; }
+
+/* Hero blob decorations */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+  pointer-events: none;
+  filter: blur(60px);
+}
+.blob-1 { width: 500px; height: 500px; top: -160px; right: -160px; }
+.blob-2 { width: 400px; height: 400px; bottom: -128px; left: -128px; }
+
+/* Dashboard mockup */
+.dashboard-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px color-mix(in srgb, var(--primary) 8%, transparent);
+  position: relative;
+}
+.dashboard-card::after {
+  content: '';
+  position: absolute;
+  inset: -1rem;
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+  border-radius: 1.5rem;
+  z-index: -1;
+}
+.dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.dash-header-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.dash-header-title { font-size: .875rem; font-weight: 700; color: var(--fg); }
+
+.tfi-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--secondary);
+  border-radius: .875rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+.tfi-icon {
+  width: 3.5rem; height: 3.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+.tfi-icon svg { width: 1.5rem; height: 1.5rem; }
+.tfi-score { font-size: 1.5rem; font-weight: 800; color: var(--fg); }
+.tfi-trend { font-size: .7rem; font-weight: 700; color: var(--primary); }
+.tfi-label { font-size: .7rem; font-weight: 500; color: var(--muted); }
+
+.patient-list { display: flex; flex-direction: column; gap: .75rem; }
+.patient-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: .625rem;
+  padding: .625rem .75rem;
+  background: var(--card);
+}
+.patient-avatar {
+  width: 2rem; height: 2rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.patient-avatar svg { width: 14px; height: 14px; }
+.patient-info { flex: 1; min-width: 0; }
+.patient-name { font-size: .75rem; font-weight: 700; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.patient-progress-wrap { display: flex; align-items: center; gap: .5rem; margin-top: .375rem; }
+.progress-bar { flex: 1; height: 6px; background: var(--secondary); border-radius: 9999px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 9999px; }
+.progress-pct { font-size: 10px; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+.patient-status {
+  margin-left: .5rem;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: .15rem .5rem;
+  flex-shrink: 0;
+}
+.status-done { background: hsl(48, 100%, 90%); color: hsl(40, 90%, 40%); }
+.status-active { background: hsl(142, 76%, 90%); color: hsl(142, 76%, 35%); }
+
+/* ===== SECTION WRAPPER ===== */
+.section { padding: 5rem 0; }
+.section-alt { background: var(--secondary); }
+
+/* ===== VOORDELEN ===== */
+.cards-grid-3 { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .cards-grid-3 { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .cards-grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+.feature-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 1.75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s, transform .2s;
+  cursor: default;
+}
+.feature-card:hover {
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--primary) 8%, transparent);
+  transform: translateY(-2px);
+}
+.card-icon {
+  width: 2.75rem; height: 2.75rem;
+  border-radius: .75rem;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem;
+  transition: background .25s, color .25s;
+}
+.feature-card:hover .card-icon { background: var(--primary); color: var(--primary-fg); }
+.card-icon svg { width: 1.25rem; height: 1.25rem; }
+.feature-card h3 { font-size: .9375rem; font-weight: 700; color: var(--fg); margin-bottom: .5rem; }
+.feature-card p { font-size: .875rem; line-height: 1.65; color: var(--muted); }
+
+.highlight-banner {
+  margin-top: 3.5rem;
+  border-radius: 1.25rem;
+  background: var(--primary);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--primary-fg);
+  line-height: 1.6;
+}
+
+/* ===== HOE HET WERKT ===== */
+.steps-grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1fr;
+  max-width: 56rem;
+  margin: 0 auto;
+  position: relative;
+}
+@media (min-width: 1024px) {
+  .steps-grid { grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 1.375rem;
+    height: 1px;
+    background: var(--border);
+    pointer-events: none;
+  }
+}
+.step {
+  display: flex;
+  gap: 1.25rem;
+  position: relative;
+}
+.step-line {
+  position: absolute;
+  left: 1.375rem;
+  top: 3.5rem;
+  bottom: -1rem;
+  width: 1px;
+  background: var(--border);
+}
+@media (min-width: 1024px) {
+  .step { flex-direction: column; align-items: center; text-align: center; }
+  .step-line { display: none; }
+}
+.step-num {
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: var(--primary-fg);
+  font-weight: 700;
+  font-size: .875rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 25%, transparent);
+  position: relative;
+  z-index: 1;
+}
+.step-content { padding-bottom: .5rem; }
+.step-icon {
+  width: 2.5rem; height: 2.5rem;
+  border-radius: .75rem;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: .75rem;
+}
+@media (min-width: 1024px) { .step-icon { margin-inline: auto; } }
+.step-icon svg { width: 1.25rem; height: 1.25rem; }
+.step h3 { font-size: .9375rem; font-weight: 700; color: var(--fg); margin-bottom: .375rem; }
+.step p { font-size: .875rem; line-height: 1.65; color: var(--muted); }
+
+/* Dashboard preview (hoe het werkt) */
+.dash-preview {
+  max-width: 40rem;
+  margin: 4rem auto 0;
+}
+.dashboard-card-toggle {
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.dashboard-card-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+.dashboard-details {
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: var(--card);
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--primary) 6%, transparent);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-4px);
+  transition: max-height .35s ease, opacity .35s ease, transform .35s ease;
+}
+.dashboard-card-toggle + .dashboard-details { max-height: none; }
+.dash-preview.open .dashboard-details,
+.hero-dash-wrapper.open .dashboard-details {
+  max-height: 400px;
+  opacity: 1;
+  transform: translateY(0);
+}
+.dash-toggle-hint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .35rem;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: .35rem;
+}
+.dash-toggle-icon {
+  transition: transform .25s ease;
+}
+.dash-preview.open .dash-toggle-icon,
+.hero-dash-wrapper.open .dash-toggle-icon {
+  transform: rotate(180deg);
+}
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border-radius: .75rem;
+  padding: .6rem .75rem;
+  background: color-mix(in srgb, var(--secondary) 60%, transparent);
+  font-size: .8125rem;
+}
+.detail-label {
+  font-weight: 700;
+  font-size: .75rem;
+  border-radius: .625rem;
+  padding: .2rem .55rem;
+  white-space: nowrap;
+}
+.detail-label.green { color: hsl(160, 60%, 32%); background: hsl(160, 60%, 92%); }
+.detail-label.orange { color: hsl(28, 85%, 45%); background: hsl(28, 85%, 94%); }
+.detail-label.red { color: hsl(0, 75%, 45%); background: hsl(0, 85%, 95%); }
+.detail-text {
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  /* Verberg tweede dashboard onder 'Hoe het werkt' op mobiel */
+  .dash-preview {
+    display: none;
+  }
+}
+.client-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: .875rem;
+  background: color-mix(in srgb, var(--secondary) 50%, transparent);
+  padding: .75rem 1rem;
+  margin-bottom: .625rem;
+}
+.client-meta { flex: 1; min-width: 0; }
+.client-name { font-size: .75rem; font-weight: 700; color: var(--fg); }
+.client-module { font-size: 10px; color: var(--muted); }
+.client-tfi { text-align: right; flex-shrink: 0; }
+.client-tfi-val { font-size: .75rem; font-weight: 700; color: var(--fg); }
+.client-tfi-trend { font-size: 10px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 2px; justify-content: flex-end; }
+
+/* ===== VOOR WIE / BEWEZEN ===== */
+.card-center {
+  border-radius: .875rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 2rem;
+  text-align: center;
+}
+.card-center-icon {
+  width: 3.5rem; height: 3.5rem;
+  border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+.card-center-icon.accent { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+.card-center-icon.olive { background: color-mix(in srgb, var(--olive) 12%, transparent); color: var(--olive); }
+.card-center-icon svg { width: 1.5rem; height: 1.5rem; }
+.card-center h3 { font-size: 1rem; font-weight: 700; color: var(--fg); margin-bottom: .5rem; }
+.card-center p { font-size: .875rem; line-height: 1.65; color: var(--muted); }
+
+/* ===== TARIEVEN ===== */
+.plans-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+@media (min-width: 768px) { .plans-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+.plan-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.plan-card.highlighted {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.plan-name { font-size: 1rem; font-weight: 700; color: var(--fg); }
+.plan-price { font-size: 1.5rem; font-weight: 800; color: var(--fg); margin-top: .25rem; }
+.plan-desc { font-size: .875rem; color: var(--muted); margin-top: .5rem; }
+.plan-features { list-style: none; margin: 2rem 0; flex: 1; display: flex; flex-direction: column; gap: .75rem; }
+.plan-features li { display: flex; align-items: flex-start; gap: .5rem; font-size: .875rem; color: var(--fg); }
+.plan-features li svg { width: 1rem; height: 1rem; color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+
+/* ===== CTA ===== */
+.cta-section {
+  background: var(--primary);
+  padding: 5rem 0;
+}
+.cta-inner {
+  max-width: 36rem;
+  margin: 0 auto;
+  text-align: center;
+}
+.cta-inner h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: var(--primary-fg);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+.cta-inner p {
+  margin-top: 1rem;
+  font-size: 1.0625rem;
+  color: color-mix(in srgb, var(--primary-fg) 80%, transparent);
+  line-height: 1.65;
+}
+.cta-inner .btn { margin-top: 2.5rem; }
+
+/* ===== FOOTER ===== */
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  padding: 3rem 0;
+}
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+}
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+.footer-nav a { font-size: .875rem; color: var(--muted); transition: color .2s; }
+.footer-nav a:hover { color: var(--fg); }
+.footer-copy { font-size: .75rem; color: var(--muted); }
+
+/* ===== ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.fade-up-delay-1 { transition-delay: .07s; }
+.fade-up-delay-2 { transition-delay: .14s; }
+.fade-up-delay-3 { transition-delay: .21s; }
+.fade-up-delay-4 { transition-delay: .28s; }
+.fade-up-delay-5 { transition-delay: .35s; }
+.fade-up-delay-6 { transition-delay: .42s; }
+
+/* ===== SVG ICONS (inline) ===== */
+svg { display: inline-block; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="logo">
+      <span class="logo-name">Tinzo</span>
+      <span class="logo-badge">Pro</span>
+    </a>
+
+    <nav class="nav-desktop">
+      <ul class="nav-links">
+        <li><a href="#voordelen">Voordelen</a></li>
+        <li><a href="#hoe-het-werkt">Hoe het werkt</a></li>
+        <li><a href="#voor-wie">Voor wie</a></li>
+        <li><a href="#tarieven">Tarieven</a></li>
+        <li class="nav-cta">
+          <a href="#demo" class="btn btn-accent btn-sm">Gratis demo aanvragen</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#voordelen" onclick="document.getElementById('mobileMenu').classList.remove('open')">Voordelen</a>
+    <a href="#hoe-het-werkt" onclick="document.getElementById('mobileMenu').classList.remove('open')">Hoe het werkt</a>
+    <a href="#voor-wie" onclick="document.getElementById('mobileMenu').classList.remove('open')">Voor wie</a>
+    <a href="#tarieven" onclick="document.getElementById('mobileMenu').classList.remove('open')">Tarieven</a>
+    <a href="#demo" class="btn btn-accent btn-sm" style="justify-content:center">Gratis demo aanvragen</a>
+  </nav>
+</header>
+
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="container" style="position:relative;z-index:1">
+    <div class="hero-grid">
+      <!-- Text -->
+      <div class="hero-text fade-up visible">
+        <span class="badge-pill">Voor audiologen, KNO-artsen &amp; GZ-psychologen</span>
+        <h1>Begeleid je patiënten met tinnitus. <span class="muted">Slim, efficiënt en hybride.</span></h1>
+        <p>Tinzo Pro geeft jou als zorgprofessional inzicht in de voortgang van je cliënten en combineert e-health met persoonlijk contact.</p>
+        <div class="hero-btns">
+          <a href="#demo" class="btn btn-accent">Gratis demo aanvragen</a>
+          <a href="#voordelen" class="btn btn-outline">Meer weten</a>
+        </div>
+        <div class="trust-items">
+          <span class="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Geen verwijzing nodig
+          </span>
+          <span class="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Koppeling met jouw CRM
+          </span>
+          <span class="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Direct inzetbaar
+          </span>
+        </div>
+      </div>
+
+      <!-- Dashboard Mockup -->
+      <div class="fade-up visible hero-dash-wrapper" style="transition-delay:.3s">
+        <button class="dashboard-card dashboard-card-toggle hero-dashboard-toggle" type="button">
+          <div class="dash-header">
+            <div>
+              <div class="dash-header-label">Professioneel Dashboard</div>
+              <div class="dash-header-title">Cliëntoverzicht</div>
+            </div>
+            <a href="#demo" class="btn btn-primary btn-sm">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Agenda videoconsulten
+            </a>
+          </div>
+
+          <div class="tfi-card">
+            <div class="tfi-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <div class="tfi-label">Gem. TFI-score cliënten</div>
+              <div style="display:flex;align-items:baseline;gap:.5rem;margin-top:4px">
+                <span class="tfi-score">34.2</span>
+                <span class="tfi-trend">↓ 12% deze maand</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="patient-list">
+            <div class="patient-row">
+              <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="patient-info">
+                <div class="patient-name">M. de Vries</div>
+                <div class="patient-progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+                  <span class="progress-pct">72%</span>
+                </div>
+              </div>
+              <span class="patient-status status-active">Actief</span>
+            </div>
+            <div class="patient-row">
+              <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="patient-info">
+                <div class="patient-name">J. Bakker</div>
+                <div class="patient-progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+                  <span class="progress-pct">45%</span>
+                </div>
+              </div>
+              <span class="patient-status status-active">Actief</span>
+            </div>
+            <div class="patient-row">
+              <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="patient-info">
+                <div class="patient-name">S. van Dijk</div>
+                <div class="patient-progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div>
+                  <span class="progress-pct">91%</span>
+                </div>
+              </div>
+              <span class="patient-status status-done">Nazorg</span>
+            </div>
+            <div class="patient-row">
+              <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="patient-info">
+                <div class="patient-name">R. Jansen</div>
+                <div class="patient-progress-wrap">
+                  <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+                  <span class="progress-pct">30%</span>
+                </div>
+              </div>
+              <span class="patient-status status-active">Actief</span>
+            </div>
+          </div>
+          <div class="dash-toggle-hint">
+            Voortgang bekijken
+            <span class="dash-toggle-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </span>
+          </div>
+        </button>
+        <div class="dashboard-details hero-dashboard-details">
+          <div class="detail-list">
+            <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">
+              Voortgang cliënt
+            </div>
+            <div class="detail-row">
+              <span class="detail-label green">Videoconsult</span>
+              <span class="detail-text">Gepland op 14-06-2026 om 15:00.</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label orange">Huiswerk</span>
+              <span class="detail-text">ACT-oefening: Defusie — 3/5 voltooid.</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label red">TFI Score</span>
+              <span class="detail-text">Week 1: 62 → Week 4: 41 (↓ 34%).</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== VOORDELEN ========== -->
+<section id="voordelen" class="section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-label">Waarom Tinzo Pro</span>
+      <h2>Minder druk op jouw praktijk. <span style="color:var(--primary)">Meer grip voor je patiënt.</span></h2>
+    </div>
+
+    <div class="cards-grid-3">
+      <div class="feature-card fade-up fade-up-delay-1">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>
+        </div>
+        <h3>Minder herhaalconsulten</h3>
+        <p>Patiënten werken zelfstandig aan hun herstel. Jij besteedt jouw tijd aan de momenten die er echt toe doen.</p>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-2">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Voortgang altijd inzichtelijk</h3>
+        <p>Zie via jouw dashboard welke modules een cliënt gebruikt, hoe klachten zich ontwikkelen en wanneer bijsturen nodig is.</p>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-3">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <h3>E-health videoconsulten</h3>
+        <p>Cliënten plannen consulten in vanuit hun traject. Jij houdt de regie, zonder extra planningssoftware.</p>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-4">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>Koppeling met jouw CRM</h3>
+        <p>Tinzo Pro integreert met het CRM-systeem dat jij al gebruikt. Alle cliëntdata op één plek.</p>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-5">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3>Tinzo neemt de uitleg over</h3>
+        <p>Psycho-educatie, oefeningen en kennisbank zitten in de app. Dat scheelt jou aanzienlijk in je consulttijd.</p>
+      </div>
+      <div class="feature-card fade-up fade-up-delay-6">
+        <div class="card-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Chat <span style="font-size:.75rem;font-weight:500;color:var(--muted)">(binnenkort)</span></h3>
+        <p>Stuur cliënten berichten voor huiswerkvragen of directe ondersteuning. Laagdrempelig contact tussen consulten in.</p>
+      </div>
+    </div>
+
+    <div class="highlight-banner fade-up">
+      Tinzo Pro is geschikt voor audiologiepraktijken, KNO-poliklinieken en GGZ-instellingen.
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== HOE HET WERKT ========== -->
+<section id="hoe-het-werkt" class="section section-alt">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-label" style="font-size:1.1rem">Stappenplan</span>
+      <h2>In drie stappen <span style="color:var(--primary)">hybride zorg verlenen</span></h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step fade-up fade-up-delay-1">
+        <div class="step-line"></div>
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          </div>
+          <h3>Voeg een cliënt toe</h3>
+          <p>Je maakt een cliëntprofiel aan in Tinzo Pro en koppelt dit aan jouw CRM. De cliënt ontvangt automatisch een uitnodiging om de app te downloaden.</p>
+        </div>
+      </div>
+
+      <div class="step fade-up fade-up-delay-2">
+        <div class="step-line"></div>
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <h3>Cliënt start zijn traject</h3>
+          <p>De cliënt doorloopt een persoonlijk TFI-profiel en krijgt een traject op maat: psycho-educatie, oefeningen en dagelijkse check-ins.</p>
+        </div>
+      </div>
+
+      <div class="step fade-up fade-up-delay-3">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Jij houdt de regie</h3>
+          <p>Via jouw professioneel dashboard volg je voortgang, plan je videoconsulten in en stuur je bij waar nodig. Op jouw tempo, op jouw moment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard preview -->
+    <div class="dash-preview fade-up">
+      <button class="dashboard-card dashboard-card-toggle" type="button">
+        <div class="dash-header">
+          <div>
+            <div class="dash-header-label">Professioneel dashboard</div>
+            <div class="dash-header-title">Mijn cliënten</div>
+          </div>
+          <a href="#demo" class="btn btn-primary btn-sm">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="5" width="13" height="14" rx="2" ry="2" />
+              <polygon points="19 8 23 10.5 23 13.5 19 16 19 8" />
+            </svg>
+            Agenda videoconsulten
+          </a>
+        </div>
+        <div>
+          <div class="client-row">
+            <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="client-meta"><div class="client-name">A. Hendriks</div><div class="client-module">Module 3 / 6</div></div>
+            <div class="client-tfi"><div class="client-tfi-val">TFI 42</div><div class="client-tfi-trend">↓ 8%</div></div>
+          </div>
+          <div class="client-row">
+            <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="client-meta"><div class="client-name">L. Smeets</div><div class="client-module">Module 5 / 6</div></div>
+            <div class="client-tfi"><div class="client-tfi-val">TFI 28</div><div class="client-tfi-trend">↓ 15%</div></div>
+          </div>
+          <div class="client-row">
+            <div class="patient-avatar"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="client-meta"><div class="client-name">K. de Boer</div><div class="client-module">Module 2 / 6</div></div>
+            <div class="client-tfi"><div class="client-tfi-val">TFI 56</div><div class="client-tfi-trend">↓ 3%</div></div>
+          </div>
+          <div class="dash-toggle-hint">
+            Voortgang bekijken
+            <span class="dash-toggle-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </button>
+      <div class="dashboard-details">
+        <div class="detail-list">
+          <div style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem;">
+            Voortgang cliënt
+          </div>
+          <div class="detail-row">
+            <span class="detail-label green">Videoconsult</span>
+            <span class="detail-text">Gepland op 14-06-2026 om 15:00.</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label orange">Huiswerk</span>
+            <span class="detail-text">ACT-oefening: Defusie — 3/5 voltooid.</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label red">TFI Score</span>
+            <span class="detail-text">Week 1: 62 → Week 4: 41 (↓ 34%).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== BEWEZEN AANPAK ========== -->
+<section id="bewezen" class="section">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Bewezen aanpak</h2>
+      <p>Tinzo Pro is gebouwd op een fundament van wetenschap en klinische expertise.</p>
+    </div>
+    <div class="cards-grid-3">
+      <div class="card-center fade-up fade-up-delay-1">
+        <div class="card-center-icon olive">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+        </div>
+        <h3>Wetenschappelijk onderbouwd</h3>
+        <p>Gebaseerd op peer-reviewed studies naar CGT en geluidstherapie bij tinnitus.</p>
+      </div>
+      <div class="card-center fade-up fade-up-delay-2">
+        <div class="card-center-icon olive">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <h3>Ontwikkeld met experts</h3>
+        <p>In samenwerking met audiologisten, KNO-artsen en universitaire onderzoekers.</p>
+      </div>
+      <div class="card-center fade-up fade-up-delay-3">
+        <div class="card-center-icon olive">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>Conform richtlijnen</h3>
+        <p>Aansluitend bij de NHG-standaard en internationale tinnitus-behandelprotocollen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== VOOR WIE ========== -->
+<section id="voor-wie" class="section section-alt">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Voor wie is Tinzo Pro?</h2>
+      <p>Ontworpen voor zorgprofessionals die werken met patiënten met tinnitus en hyperacusis.</p>
+    </div>
+    <div class="cards-grid-3">
+      <div class="card-center fade-up fade-up-delay-1">
+        <div class="card-center-icon accent">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </div>
+        <h3>Audiologisten</h3>
+        <p>Integreer Tinzo Pro in je audiologische revalidatie en bied patiënten een gestructureerd nazorgtraject.</p>
+      </div>
+      <div class="card-center fade-up fade-up-delay-2">
+        <div class="card-center-icon accent">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>KNO-artsen</h3>
+        <p>Verwijs patiënten eenvoudig door naar een digitaal behandelprogramma dat evidence-based is.</p>
+      </div>
+      <div class="card-center fade-up fade-up-delay-3">
+        <div class="card-center-icon accent">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        <h3>Klinisch psychologen</h3>
+        <p>Gebruik de CGT-modules als aanvulling op jouw face-to-face therapie bij tinnitusdistress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== TARIEVEN ========== -->
+<section id="tarieven" class="section">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Tarieven</h2>
+      <p>Flexibele plannen die meegroeien met jouw praktijk.</p>
+    </div>
+    <div class="plans-grid">
+      <!-- Starter -->
+      <div class="plan-card fade-up fade-up-delay-1">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">Gratis</div>
+        <div class="plan-desc">Perfect om Tinzo Pro te ontdekken.</div>
+        <ul class="plan-features">
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>1 behandelaar</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tot 5 patiënten</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Basis modules</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>E-mail support</li>
+        </ul>
+        <a href="#demo" class="btn btn-outline" style="justify-content:center">Start gratis</a>
+      </div>
+
+      <!-- Praktijk (highlighted) -->
+      <div class="plan-card highlighted fade-up fade-up-delay-2">
+        <div class="plan-name">Praktijk</div>
+        <div class="plan-price">€ 49 / maand</div>
+        <div class="plan-desc">Voor zelfstandige praktijken.</div>
+        <ul class="plan-features">
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tot 3 behandelaars</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Onbeperkt patiënten</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Alle modules</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Dashboard &amp; rapportages</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Prioriteit support</li>
+        </ul>
+        <a href="#demo" class="btn btn-accent" style="justify-content:center">Demo aanvragen</a>
+      </div>
+
+      <!-- Kliniek -->
+      <div class="plan-card fade-up fade-up-delay-3">
+        <div class="plan-name">Kliniek</div>
+        <div class="plan-price">Op maat</div>
+        <div class="plan-desc">Voor klinieken en ziekenhuizen.</div>
+        <ul class="plan-features">
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Onbeperkt behandelaars</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Onbeperkt patiënten</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>API-integratie</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>SSO &amp; compliance</li>
+          <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Dedicated accountmanager</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="justify-content:center">Neem contact op</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== CTA ========== -->
+<section id="demo" class="cta-section">
+  <div class="container">
+    <div class="cta-inner fade-up visible">
+      <h2>Klaar om te starten met Tinzo Pro?</h2>
+      <p>Vraag een gratis demo aan en ontdek hoe Tinzo Pro jouw praktijk kan versterken.</p>
+      <a href="mailto:info@tinzo.nl" class="btn btn-accent">
+        Gratis demo aanvragen
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <a href="#" class="logo">
+      <span class="logo-name">Tinzo</span>
+      <span class="logo-badge">Pro</span>
+    </a>
+    <nav class="footer-nav">
+      <a href="#voordelen">Voordelen</a>
+      <a href="#hoe-het-werkt">Hoe het werkt</a>
+      <a href="#voor-wie">Voor wie</a>
+      <a href="#tarieven">Tarieven</a>
+    </nav>
+    <p class="footer-copy">© 2026 Tinzo. Alle rechten voorbehouden.</p>
+  </div>
+</footer>
+
+
+<!-- ========== SCROLL ANIMATIONS ========== -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '-40px' });
+
+document.querySelectorAll('.fade-up:not(.visible)').forEach(el => observer.observe(el));
+
+// Klikbare dashboards met uitschuivende details (hero + stappenplan)
+document.querySelectorAll('.hero-dash-wrapper, .dash-preview').forEach(wrapper => {
+  const toggle = wrapper.querySelector('.dashboard-card-toggle');
+  const details = wrapper.querySelector('.dashboard-details');
+  if (!toggle || !details) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = wrapper.classList.toggle('open');
+    if (!isOpen) {
+      // force reflow zodat animatie bij opnieuw openen goed werkt
+      void details.offsetHeight;
+    }
+  });
+});
+</script>
+</body>
+</html>
